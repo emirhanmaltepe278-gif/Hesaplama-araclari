@@ -1,61 +1,127 @@
 <!DOCTYPE html><html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hesaplama Araçları</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-    body { background: #0f172a; color: #e2e8f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    .container { width: 100%; max-width: 500px; padding: 20px; }
-    h1 { text-align: center; margin-bottom: 20px; }
-    .card { background: #1e293b; padding: 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-    input, select, button {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-    }
-    input, select { background: #334155; color: #fff; }
-    button { background: #38bdf8; color: #000; font-weight: bold; cursor: pointer; }
-    button:hover { background: #0ea5e9; }
-    .result { margin-top: 15px; font-size: 18px; text-align: center; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hesaplama Merkezi</title>
+<meta name="description" content="Faiz, kalori, TYT puan, kredi ve daha fazlasını hesapla.">
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+header {
+  padding: 15px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+}
+.tab {
+  cursor: pointer;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+}
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+.card {
+  background: rgba(255,255,255,0.1);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  color: #000;
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;
+}
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: none;
+}
+button { background: #667eea; color: white; }
+.close { float: right; cursor: pointer; }
+.ad {
+  background: white;
+  color: black;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Hesaplama Araçları</h1><div class="card">
-  <h3>Yüzde Hesaplama</h3>
-  <input type="number" id="value" placeholder="Sayı" />
-  <input type="number" id="percent" placeholder="Yüzde" />
-  <button onclick="calculatePercent()">Hesapla</button>
-  <div class="result" id="percentResult"></div>
-</div>
+<header>Hesaplama Merkezi</header><div class="tabs">
+  <div class="tab">💰 Finans</div>
+  <div class="tab">🏋️ Sağlık</div>
+  <div class="tab">📚 Eğitim</div>
+</div><div class="container">
+  <div class="card" onclick="openModal('faiz')">Faiz</div>
+  <div class="card" onclick="openModal('kredi')">Kredi</div>
+  <div class="card" onclick="openModal('kalori')">Kalori</div>
+  <div class="card" onclick="openModal('bmi')">BMI</div>
+  <div class="card" onclick="openModal('su')">Su İhtiyacı</div>
+  <div class="card" onclick="openModal('tyt')">TYT Puan</div>
+</div><div class="ad">Google AdSense Reklam Alanı</div><div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">X</span>
+    <div id="content"></div>
+  </div>
+</div><script>
+function openModal(type) {
+  document.getElementById('modal').style.display = 'flex';
+  let c = '';
 
-<div class="card" style="margin-top:20px;">
-  <h3>BMI Hesaplama</h3>
-  <input type="number" id="weight" placeholder="Kilo (kg)" />
-  <input type="number" id="height" placeholder="Boy (cm)" />
-  <button onclick="calculateBMI()">Hesapla</button>
-  <div class="result" id="bmiResult"></div>
-</div>
+  if(type==='faiz') c=`<h3>Faiz</h3><input id=p placeholder=Para><input id=o placeholder=%><input id=s placeholder=Yıl><button onclick="sonuc(p.value*(1+(o.value/100)*s.value))">Hesapla</button><p id=sonuc></p>`;
 
-  </div>  <script>
-    function calculatePercent() {
-      const value = document.getElementById('value').value;
-      const percent = document.getElementById('percent').value;
-      if (!value || !percent) return;
-      const result = (value * percent) / 100;
-      document.getElementById('percentResult').innerText = "Sonuç: " + result;
-    }
+  if(type==='kredi') c=`<h3>Kredi</h3><input id=p placeholder=Para><input id=o placeholder=%><input id=v placeholder=Ay><button onclick="sonuc((p.value*(1+(o.value/100)))/v.value)">Aylık Ödeme</button><p id=sonuc></p>`;
 
-    function calculateBMI() {
-      const weight = document.getElementById('weight').value;
-      const height = document.getElementById('height').value / 100;
-      if (!weight || !height) return;
-      const bmi = weight / (height * height);
-      document.getElementById('bmiResult').innerText = "BMI: " + bmi.toFixed(2);
-    }
-  </script></body>
-</html>
+  if(type==='kalori') c=`<h3>Kalori</h3><input id=k placeholder=Kilo><input id=b placeholder=Boy><input id=y placeholder=Yaş><button onclick="sonuc(10*k.value+6.25*b.value-5*y.value+5)">Hesapla</button><p id=sonuc></p>`;
+
+  if(type==='bmi') c=`<h3>BMI</h3><input id=k placeholder=Kilo><input id=b placeholder=Boy><button onclick="sonuc(k.value/((b.value/100)*(b.value/100)))">Hesapla</button><p id=sonuc></p>`;
+
+  if(type==='su') c=`<h3>Su İhtiyacı</h3><input id=k placeholder=Kilo><button onclick="sonuc(k.value*0.033)">Litre</button><p id=sonuc></p>`;
+
+  if(type==='tyt') c=`<h3>TYT</h3><input id=n placeholder=Net><button onclick="sonuc(n.value*5)">Puan</button><p id=sonuc></p>`;
+
+  document.getElementById('content').innerHTML=c;
+}
+
+function sonuc(val){
+ document.getElementById('sonuc').innerText = 'Sonuç: '+ Math.round(val);
+}
+
+function closeModal(){
+ document.getElementById('modal').style.display='none';
+}
+</script><!-- Google AdSense buraya eklenecek --></body>
+  </html>
