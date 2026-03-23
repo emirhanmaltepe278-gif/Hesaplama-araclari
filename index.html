@@ -1,83 +1,61 @@
-<!DOCTYPE html>
-<html lang="tr">
+<!DOCTYPE html><html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pratik Hesaplama</title>
-    <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background: #f4f4f9; }
-        .container { background: white; padding: 20px; border-radius: 10px; shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; text-align: center; }
-        button { background: #007bff; color: white; border: none; padding: 10px 15px; margin: 5px; cursor: pointer; border-radius: 5px; transition: 0.3s; }
-        button:hover { background: #0056b3; }
-        .hidden { display: none; margin-top: 20px; padding: 15px; border-top: 1px solid #ddd; }
-        input { width: 80%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
-        #sonuc { margin-top: 15px; font-weight: bold; color: #28a745; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hesaplama Araçları</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { background: #0f172a; color: #e2e8f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .container { width: 100%; max-width: 500px; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 20px; }
+    .card { background: #1e293b; padding: 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+    input, select { background: #334155; color: #fff; }
+    button { background: #38bdf8; color: #000; font-weight: bold; cursor: pointer; }
+    button:hover { background: #0ea5e9; }
+    .result { margin-top: 15px; font-size: 18px; text-align: center; }
+  </style>
 </head>
 <body>
-
-<div class="container">
-    <h2>Pratik Hesaplama</h2>
-    <button onclick="goster('yag')">Yağ Oranı</button>
-    <button onclick="goster('not')">Not Ortalaması</button>
-
-    <div id="input-alani" class="hidden">
-        <h3 id="baslik">Hesaplama</h3>
-        <input type="number" id="deger1" placeholder="Birinci değer">
-        <input type="number" id="deger2" placeholder="İkinci değer">
-        <button onclick="hesapla()">Hesapla</button>
-        <div id="sonuc"></div>
-    </div>
+  <div class="container">
+    <h1>Hesaplama Araçları</h1><div class="card">
+  <h3>Yüzde Hesaplama</h3>
+  <input type="number" id="value" placeholder="Sayı" />
+  <input type="number" id="percent" placeholder="Yüzde" />
+  <button onclick="calculatePercent()">Hesapla</button>
+  <div class="result" id="percentResult"></div>
 </div>
 
-<script>
-    let aktifMod = '';
+<div class="card" style="margin-top:20px;">
+  <h3>BMI Hesaplama</h3>
+  <input type="number" id="weight" placeholder="Kilo (kg)" />
+  <input type="number" id="height" placeholder="Boy (cm)" />
+  <button onclick="calculateBMI()">Hesapla</button>
+  <div class="result" id="bmiResult"></div>
+</div>
 
-    // Butonlara basınca ekranı açan fonksiyon
-    function goster(mod) {
-        aktifMod = mod;
-        const panel = document.getElementById('input-alani');
-        const baslik = document.getElementById('baslik');
-        const d1 = document.getElementById('deger1');
-        const d2 = document.getElementById('deger2');
-        const sonucDiv = document.getElementById('sonuc');
-        
-        panel.style.display = 'block';
-        sonucDiv.innerText = ''; // Eski sonucu temizle
-
-        if (mod === 'yag') {
-            baslik.innerText = 'Yağ Oranı Hesapla';
-            d1.placeholder = 'Bel Çevresi (cm)';
-            d2.placeholder = 'Boy (cm)';
-        } else {
-            baslik.innerText = 'Not Ortalaması Hesapla';
-            d1.placeholder = 'Vize Notu';
-            d2.placeholder = 'Final Notu';
-        }
+  </div>  <script>
+    function calculatePercent() {
+      const value = document.getElementById('value').value;
+      const percent = document.getElementById('percent').value;
+      if (!value || !percent) return;
+      const result = (value * percent) / 100;
+      document.getElementById('percentResult').innerText = "Sonuç: " + result;
     }
 
-    // Hesaplama mantığı
-    function hesapla() {
-        const v1 = parseFloat(document.getElementById('deger1').value);
-        const v2 = parseFloat(document.getElementById('deger2').value);
-        const sonucDiv = document.getElementById('sonuc');
-
-        if (isNaN(v1) || isNaN(v2)) {
-            sonucDiv.innerText = 'Lütfen sayı girin!';
-            return;
-        }
-
-        if (aktifMod === 'yag') {
-            // Basit bir oran mantığı (Örnektir)
-            let oran = (v1 / v2) * 20; 
-            sonucDiv.innerText = 'Tahmini Yağ Oranınız: %' + oran.toFixed(2);
-        } else if (aktifMod === 'not') {
-            // Klasik %40 - %60 hesabı
-            let ort = (v1 * 0.4) + (v2 * 0.6);
-            sonucDiv.innerText = 'Ortalamanız: ' + ort.toFixed(2);
-        }
+    function calculateBMI() {
+      const weight = document.getElementById('weight').value;
+      const height = document.getElementById('height').value / 100;
+      if (!weight || !height) return;
+      const bmi = weight / (height * height);
+      document.getElementById('bmiResult').innerText = "BMI: " + bmi.toFixed(2);
     }
-</script>
-
-</body>
+  </script></body>
 </html>
