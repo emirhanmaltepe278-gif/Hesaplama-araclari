@@ -3,84 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hesapla Pro | Ücretsiz Online Hesaplama Araçları</title>
+    <title>Pratik Hesaplama</title>
     <style>
-        :root { --p: #0f172a; --s: #2563eb; --bg: #f8fafc; --t: #334155; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--t); margin: 0; line-height: 1.6; }
-        header { background: var(--p); color: white; padding: 40px 20px; text-align: center; }
-        .container { max-width: 800px; margin: -40px auto 40px; padding: 0 15px; }
-        .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
-        .tab-btn { border: none; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: 600; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: 0.2s; }
-        .tab-btn.active { background: var(--s); color: white; }
-        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: none; }
-        .card.active { display: block; }
-        input, select { width: 100%; padding: 14px; margin: 10px 0 20px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
-        button.calc-btn { width: 100%; background: var(--s); color: white; border: none; padding: 16px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
-        .res { margin-top: 25px; padding: 20px; background: #f0f7ff; border-radius: 12px; border-left: 5px solid var(--s); text-align: center; font-weight: bold; font-size: 1.2rem; }
-        footer { text-align: center; padding: 40px 20px; color: #94a3b8; font-size: 0.9rem; }
-        .legal-links a { color: #64748b; margin: 0 10px; text-decoration: none; }
-        .info-section { margin-top: 30px; font-size: 0.85rem; color: #64748b; border-top: 1px solid #f1f5f9; padding-top: 20px; }
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background: #f4f4f9; }
+        .container { background: white; padding: 20px; border-radius: 10px; shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        button { background: #007bff; color: white; border: none; padding: 10px 15px; margin: 5px; cursor: pointer; border-radius: 5px; transition: 0.3s; }
+        button:hover { background: #0056b3; }
+        .hidden { display: none; margin-top: 20px; padding: 15px; border-top: 1px solid #ddd; }
+        input { width: 80%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
+        #sonuc { margin-top: 15px; font-weight: bold; color: #28a745; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Hesapla Pro</h1>
-    <p>Sağlık, Finans ve Eğitimde En Hassas Sonuçlar</p>
-</header>
-
 <div class="container">
-    <div class="nav-grid">
-        <button class="tab-btn active" onclick="tab('bmi')">BMI & Kilo</button>
-        <button class="tab-btn" onclick="tab('kredi')">Kredi</button>
-        <button class="tab-btn" onclick="tab('yag')">Yağ Oranı</button>
-        <button class="tab-btn" onclick="tab('not')">Not Ort.</button>
-    </div>
+    <h2>Pratik Hesaplama</h2>
+    <button onclick="goster('yag')">Yağ Oranı</button>
+    <button onclick="goster('not')">Not Ortalaması</button>
 
-    <div id="bmi" class="card active">
-        <h2>BMI & İdeal Kilo</h2>
-        <label>Boy (cm)</label><input type="number" id="b1" placeholder="180">
-        <label>Kilo (kg)</label><input type="number" id="k1" placeholder="75">
-        <button class="calc-btn" onclick="cBmi()">Hesapla</button>
-        <div id="rBmi" class="res">Verileri giriniz.</div>
-        <div class="info-section"><b>Nedir?</b> BMI, kilonuzun sağlıklı aralıkta olup olmadığını gösteren bir endekstir.</div>
+    <div id="input-alani" class="hidden">
+        <h3 id="baslik">Hesaplama</h3>
+        <input type="number" id="deger1" placeholder="Birinci değer">
+        <input type="number" id="deger2" placeholder="İkinci değer">
+        <button onclick="hesapla()">Hesapla</button>
+        <div id="sonuc"></div>
     </div>
-
-    <div id="kredi" class="card">
-        <h2>Kredi Taksit Hesaplama</h2>
-        <label>Kredi Tutarı (TL)</label><input type="number" id="kt">
-        <label>Faiz Oranı (%)</label><input type="number" id="kf" step="0.01">
-        <label>Vade (Ay)</label><input type="number" id="kv">
-        <button class="calc-btn" onclick="cKredi()">Hesapla</button>
-        <div id="rKredi" class="res">Tutar ve faiz giriniz.</div>
-    </div>
-
-    </div>
-
-<footer>
-    <div class="legal-links">
-        <a href="#">Hakkımızda</a> | <a href="#">Gizlilik Politikası</a> | <a href="#">İletişim</a>
-    </div>
-    <p>&copy; 2026 Hesapla Pro. Tüm hakları saklıdır.</p>
-</footer>
+</div>
 
 <script>
-    function tab(id) {
-        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        event.currentTarget.classList.add('active');
+    let aktifMod = '';
+
+    // Butonlara basınca ekranı açan fonksiyon
+    function goster(mod) {
+        aktifMod = mod;
+        const panel = document.getElementById('input-alani');
+        const baslik = document.getElementById('baslik');
+        const d1 = document.getElementById('deger1');
+        const d2 = document.getElementById('deger2');
+        const sonucDiv = document.getElementById('sonuc');
+        
+        panel.style.display = 'block';
+        sonucDiv.innerText = ''; // Eski sonucu temizle
+
+        if (mod === 'yag') {
+            baslik.innerText = 'Yağ Oranı Hesapla';
+            d1.placeholder = 'Bel Çevresi (cm)';
+            d2.placeholder = 'Boy (cm)';
+        } else {
+            baslik.innerText = 'Not Ortalaması Hesapla';
+            d1.placeholder = 'Vize Notu';
+            d2.placeholder = 'Final Notu';
+        }
     }
-    function cBmi() {
-        let b = document.getElementById('b1').value/100; let k = document.getElementById('k1').value;
-        let bmi = k/(b*b); let ideal = 22*(b*b);
-        document.getElementById('rBmi').innerHTML = `BMI: ${bmi.toFixed(1)} <br>İdeal Kilo: ${ideal.toFixed(0)} kg`;
-    }
-    function cKredi() {
-        let p = document.getElementById('kt').value; let r = (document.getElementById('kf').value/100); let n = document.getElementById('kv').value;
-        let taksit = (p*r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
-        document.getElementById('rKredi').innerHTML = `Aylık: ${taksit.toFixed(2)} TL<br>Toplam: ${(taksit*n).toFixed(0)} TL`;
+
+    // Hesaplama mantığı
+    function hesapla() {
+        const v1 = parseFloat(document.getElementById('deger1').value);
+        const v2 = parseFloat(document.getElementById('deger2').value);
+        const sonucDiv = document.getElementById('sonuc');
+
+        if (isNaN(v1) || isNaN(v2)) {
+            sonucDiv.innerText = 'Lütfen sayı girin!';
+            return;
+        }
+
+        if (aktifMod === 'yag') {
+            // Basit bir oran mantığı (Örnektir)
+            let oran = (v1 / v2) * 20; 
+            sonucDiv.innerText = 'Tahmini Yağ Oranınız: %' + oran.toFixed(2);
+        } else if (aktifMod === 'not') {
+            // Klasik %40 - %60 hesabı
+            let ort = (v1 * 0.4) + (v2 * 0.6);
+            sonucDiv.innerText = 'Ortalamanız: ' + ort.toFixed(2);
+        }
     }
 </script>
+
 </body>
-                                    </html> 
+</html>
