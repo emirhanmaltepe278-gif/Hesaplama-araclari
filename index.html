@@ -3,112 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hepsi Bir Arada Hesaplayıcı</title>
+    <title>Hesapla TR | Ücretsiz Hesaplama Araçları</title>
     <style>
-        :root { --primary: #2563eb; --bg: #f8fafc; --card: #ffffff; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #1e293b; }
-        .container { max-width: 500px; margin: 0 auto; }
-        h1 { text-align: center; color: var(--primary); font-size: 1.5rem; }
+        :root { --primary: #0f172a; --accent: #3b82f6; --bg: #f1f5f9; --text: #334155; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        header { background: var(--primary); color: white; padding: 20px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .container { max-width: 800px; margin: 20px auto; padding: 15px; }
         
-        /* Menü Stili */
-        .tabs { display: flex; gap: 5px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
-        .tab-btn { background: #e2e8f0; border: none; padding: 10px 15px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-weight: 600; }
-        .tab-btn.active { background: var(--primary); color: white; }
+        .nav-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px; }
+        .nav-btn { background: white; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .nav-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
-        /* Kart Stili */
-        .calc-card { background: var(--card); padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); display: none; }
-        .calc-card.active { display: block; }
+        .calc-section { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: none; }
+        .calc-section.active { display: block; }
+
+        input, select { width: 100%; padding: 12px; margin: 10px 0 20px 0; border: 2px solid #f1f5f9; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
+        button.main-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 18px; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; }
         
-        label { display: block; margin-top: 10px; font-size: 0.9rem; font-weight: 600; }
-        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; margin-top: 20px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; }
+        .result-box { margin-top: 25px; padding: 20px; background: #eff6ff; border-radius: 12px; border: 2px dashed var(--accent); text-align: center; font-size: 1.2rem; font-weight: bold; }
         
-        .result { margin-top: 20px; padding: 15px; background: #f1f5f9; border-radius: 8px; text-align: center; font-weight: bold; border-left: 5px solid var(--primary); }
+        /* SEO İçerik Alanı */
+        .info-content { margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 20px; font-size: 0.95rem; color: #64748b; line-height: 1.7; }
+        h2 { color: var(--primary); font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
+<header>
+    <h1>Hesapla TR</h1>
+    <p>Hızlı, Doğru ve Güvenilir Sonuçlar</p>
+</header>
+
 <div class="container">
-    <h1>🧮 Hesaplama Merkezi</h1>
-    
-    <div class="tabs">
-        <button class="tab-btn active" onclick="openTab('yag')">Yağ Oranı</button>
-        <button class="tab-btn" onclick="openTab('not')">Not Ort.</button>
-        <button class="tab-btn" onclick="openTab('kalori')">Kalori</button>
+    <div class="nav-grid">
+        <button class="nav-btn active" onclick="showTab('bmi')">BMI & İdeal Kilo</button>
+        <button class="nav-btn" onclick="showTab('yag')">Yağ Oranı</button>
+        <button class="nav-btn" onclick="showTab('not')">Not Ortalaması</button>
+        <button class="nav-btn" onclick="showTab('kalori')">Kalori İhtiyacı</button>
     </div>
 
-    <div id="yag" class="calc-card active">
-        <h3>Vücut Yağ Oranı (Donanma)</h3>
-        <select id="cinsiyet"><option value="erkek">Erkek</option><option value="kadin">Kadın</option></select>
-        <label>Boy (cm)</label><input type="number" id="boy" placeholder="Örn: 175">
-        <label>Boyun Çevresi (cm)</label><input type="number" id="boyun" placeholder="En dar yer">
-        <label>Bel Çevresi (cm)</label><input type="number" id="bel" placeholder="Göbek deliği hizası">
-        <button onclick="hesaplaYag()">Hesapla</button>
-        <div id="resYag" class="result">Bilgileri giriniz.</div>
+    <div id="bmi" class="calc-section active">
+        <h2>BMI ve İdeal Kilo Hesaplama</h2>
+        <label>Boyunuz (cm)</label><input type="number" id="bmi_boy" placeholder="Örn: 180">
+        <label>Kilonuz (kg)</label><input type="number" id="bmi_kilo" placeholder="Örn: 75">
+        <button class="main-btn" onclick="calcBMI()">Hesapla</button>
+        <div id="resBMI" class="result-box">Boy ve kilo giriniz.</div>
+        
+        <div class="info-content">
+            <h3>BMI Nedir?</h3>
+            <p>Vücut Kitle İndeksi (VKİ), kilonuzun boyunuzun karesine bölünmesiyle hesaplanan bir sağlık göstergesidir. 18.5 altı zayıf, 25 üstü fazla kilolu kabul edilir.</p>
+        </div>
     </div>
 
-    <div id="not" class="calc-card">
-        <h3>Not Ortalaması Hesapla</h3>
-        <label>Vize Notu (%40)</label><input type="number" id="vize" placeholder="0-100">
-        <label>Final Notu (%60)</label><input type="number" id="final" placeholder="0-100">
-        <button onclick="hesaplaNot()">Hesapla</button>
-        <div id="resNot" class="result">Notları giriniz.</div>
+    <div id="yag" class="calc-section">
+        <h2>Vücut Yağ Oranı</h2>
+        <select id="gender"><option value="m">Erkek</option><option value="f">Kadın</option></select>
+        <label>Bel Çevresi (cm)</label><input type="number" id="waist">
+        <label>Boyun Çevresi (cm)</label><input type="number" id="neck">
+        <label>Boy (cm)</label><input type="number" id="height_yag">
+        <button class="main-btn" onclick="calcFat()">Yağ Oranını Bul</button>
+        <div id="resFat" class="result-box">Ölçümleri giriniz.</div>
     </div>
 
-    <div id="kalori" class="calc-card">
-        <h3>Günlük Kalori İhtiyacı</h3>
-        <label>Kilo (kg)</label><input type="number" id="kilo" placeholder="Örn: 70">
-        <label>Yaş</label><input type="number" id="yas" placeholder="Örn: 25">
-        <select id="aktivite">
-            <option value="1.2">Hareketsiz (Masa başı)</option>
-            <option value="1.375">Hafif Hareketli</option>
-            <option value="1.55">Orta Hareketli</option>
-            <option value="1.725">Çok Hareketli</option>
+    <div id="not" class="calc-section">
+        <h2>Akademik Not Hesaplama</h2>
+        <label>Vize (%40)</label><input type="number" id="vize">
+        <label>Final (%60)</label><input type="number" id="final">
+        <button class="main-btn" onclick="calcGrade()">Ortalamayı Gör</button>
+        <div id="resGrade" class="result-box">Puanları giriniz.</div>
+    </div>
+
+    <div id="kalori" class="calc-section">
+        <h2>Günlük Kalori İhtiyacı</h2>
+        <label>Kilo (kg)</label><input type="number" id="k_kilo">
+        <label>Yaş</label><input type="number" id="k_yas">
+        <select id="k_akt">
+            <option value="1.2">Hareketsiz</option>
+            <option value="1.55">Düzenli Spor</option>
+            <option value="1.9">Ağır Spor</option>
         </select>
-        <button onclick="hesaplaKalori()">Hesapla</button>
-        <div id="resKalori" class="result">Sonuç burada görünecek.</div>
+        <button class="main-btn" onclick="calcCal()">Kalorini Hesapla</button>
+        <div id="resCal" class="result-box">Sonuç burada görünecek.</div>
     </div>
+
+    <footer style="text-align: center; margin-top: 50px; color: #94a3b8; font-size: 0.8rem;">
+        &copy; 2026 Hesapla TR - Tüm Hakları Saklıdır.
+    </footer>
 </div>
 
 <script>
-    function openTab(tabName) {
-        document.querySelectorAll('.calc-card').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabName).classList.add('active');
+    function showTab(id) {
+        document.querySelectorAll('.calc-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
         event.currentTarget.classList.add('active');
     }
 
-    function hesaplaYag() {
-        const c = document.getElementById('cinsiyet').value;
-        const b = parseFloat(document.getElementById('boy').value);
-        const boyun = parseFloat(document.getElementById('boyun').value);
-        const bel = parseFloat(document.getElementById('bel').value);
-        let sonuc = 0;
-
-        if(c === "erkek") {
-            sonuc = 495 / (1.0324 - 0.19077 * Math.log10(bel - boyun) + 0.15456 * Math.log10(b)) - 450;
-        } else {
-            // Kadın formülü için kalça da gerekebilir ama basitleştirilmiş hali:
-            sonuc = 495 / (1.29579 - 0.35004 * Math.log10(bel + 80 - boyun) + 0.22100 * Math.log10(b)) - 450;
-        }
-        document.getElementById('resYag').innerText = "% " + sonuc.toFixed(1);
+    function calcBMI() {
+        let b = document.getElementById('bmi_boy').value / 100;
+        let k = document.getElementById('bmi_kilo').value;
+        let bmi = k / (b * b);
+        let ideal = 22 * (b * b);
+        document.getElementById('resBMI').innerHTML = `BMI: ${bmi.toFixed(1)} <br> İdeal Kilonuz: ${ideal.toFixed(1)} kg`;
     }
 
-    function hesaplaNot() {
-        const v = document.getElementById('vize').value;
-        const f = document.getElementById('final').value;
-        const ort = (v * 0.4) + (f * 0.6);
-        document.getElementById('resNot').innerText = "Ortalama: " + ort.toFixed(2);
+    function calcFat() {
+        // Basitleştirilmiş Navy Seal Formülü
+        let bel = document.getElementById('waist').value;
+        let boyun = document.getElementById('neck').value;
+        let boy = document.getElementById('height_yag').value;
+        let fat = 495 / (1.0324 - 0.19077 * Math.log10(bel - boyun) + 0.15456 * Math.log10(boy)) - 450;
+        document.getElementById('resFat').innerText = "% " + fat.toFixed(1);
     }
 
-    function hesaplaKalori() {
-        const kilo = document.getElementById('kilo').value;
-        const yas = document.getElementById('yas').value;
-        const akt = document.getElementById('aktivite').value;
-        const bmr = (10 * kilo) + (6.25 * 175) - (5 * yas) + 5; // Erkek bazlı hızlı formül
-        document.getElementById('resKalori').innerText = Math.round(bmr * akt) + " kcal / Gün";
+    function calcGrade() {
+        let v = document.getElementById('vize').value;
+        let f = document.getElementById('final').value;
+        document.getElementById('resGrade').innerText = "Ortalama: " + (v*0.4 + f*0.6).toFixed(2);
+    }
+
+    function calcCal() {
+        let k = document.getElementById('k_kilo').value;
+        let a = document.getElementById('k_akt').value;
+        document.getElementById('resCal').innerText = Math.round(k * 24 * a) + " kcal / Gün";
     }
 </script>
 
 </body>
-                                                 </html>
+</html>
