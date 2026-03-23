@@ -3,133 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hesapla TR | Hepsi Bir Arada Ücretsiz Araçlar</title>
+    <title>Hesapla Pro | Ücretsiz Online Hesaplama Araçları</title>
     <style>
-        :root { --p: #1e293b; --s: #3b82f6; --bg: #f8fafc; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 0; color: #334155; }
-        header { background: var(--p); color: white; padding: 30px 15px; text-align: center; }
-        .container { max-width: 900px; margin: -30px auto 50px; padding: 0 15px; }
-        
-        /* Kategori Menüsü */
-        .nav-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; background: white; padding: 10px; border-radius: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .tab-btn { border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; background: #f1f5f9; transition: 0.3s; }
+        :root { --p: #0f172a; --s: #2563eb; --bg: #f8fafc; --t: #334155; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--t); margin: 0; line-height: 1.6; }
+        header { background: var(--p); color: white; padding: 40px 20px; text-align: center; }
+        .container { max-width: 800px; margin: -40px auto 40px; padding: 0 15px; }
+        .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .tab-btn { border: none; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: 600; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: 0.2s; }
         .tab-btn.active { background: var(--s); color: white; }
-
-        /* Kart Yapısı */
-        .card { background: white; margin-top: 20px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: none; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: none; }
         .card.active { display: block; }
-
-        /* Form Elemanları */
-        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        label { display: block; margin: 10px 0 5px; font-weight: 600; font-size: 0.9rem; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
-        .full-w { grid-column: span 2; }
-        button { width: 100%; background: var(--s); color: white; border: none; padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        
-        /* Sonuç Paneli */
-        .res { margin-top: 20px; padding: 20px; background: #eff6ff; border-radius: 10px; border-left: 6px solid var(--s); text-align: center; font-size: 1.2rem; }
-        
-        /* SEO Metinleri */
-        .seo-text { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; font-size: 0.85rem; color: #64748b; line-height: 1.6; }
+        input, select { width: 100%; padding: 14px; margin: 10px 0 20px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
+        button.calc-btn { width: 100%; background: var(--s); color: white; border: none; padding: 16px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+        .res { margin-top: 25px; padding: 20px; background: #f0f7ff; border-radius: 12px; border-left: 5px solid var(--s); text-align: center; font-weight: bold; font-size: 1.2rem; }
+        footer { text-align: center; padding: 40px 20px; color: #94a3b8; font-size: 0.9rem; }
+        .legal-links a { color: #64748b; margin: 0 10px; text-decoration: none; }
+        .info-section { margin-top: 30px; font-size: 0.85rem; color: #64748b; border-top: 1px solid #f1f5f9; padding-top: 20px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Hesapla TR</h1>
-    <p>Finans, Sağlık ve Eğitim Hesaplamaları</p>
+    <h1>Hesapla Pro</h1>
+    <p>Sağlık, Finans ve Eğitimde En Hassas Sonuçlar</p>
 </header>
 
 <div class="container">
-    <div class="nav-tabs">
-        <button class="tab-btn active" onclick="tab('finans')">💰 FİNANS</button>
-        <button class="tab-btn" onclick="tab('saglik')">💪 SAĞLIK</button>
-        <button class="tab-btn" onclick="tab('egitim')">🎓 EĞİTİM</button>
-        <button class="tab-btn" onclick="tab('genel')">⚙️ GENEL</button>
+    <div class="nav-grid">
+        <button class="tab-btn active" onclick="tab('bmi')">BMI & Kilo</button>
+        <button class="tab-btn" onclick="tab('kredi')">Kredi</button>
+        <button class="tab-btn" onclick="tab('yag')">Yağ Oranı</button>
+        <button class="tab-btn" onclick="tab('not')">Not Ort.</button>
     </div>
 
-    <div id="finans" class="card active">
-        <h3>Kredi Taksit Hesaplama</h3>
-        <div class="grid-inputs">
-            <div><label>Kredi Tutarı</label><input type="number" id="k_tutar" placeholder="100000"></div>
-            <div><label>Faiz Oranı (%)</label><input type="number" id="k_faiz" step="0.01" placeholder="3.50"></div>
-            <div class="full-w"><label>Vade (Ay)</label><input type="number" id="k_vade" placeholder="12"></div>
-        </div>
-        <button onclick="calcKredi()">Hesapla</button>
-        <div id="resKredi" class="res">Bilgileri girip hesaplayın.</div>
-        
-        <div class="seo-text">
-            <b>Kredi Hesaplama Hakkında:</b> Banka kredisi çekmeden önce aylık taksitlerinizi ve toplam geri ödemenizi hesaplamak bütçe yönetiminiz için kritiktir.
-        </div>
+    <div id="bmi" class="card active">
+        <h2>BMI & İdeal Kilo</h2>
+        <label>Boy (cm)</label><input type="number" id="b1" placeholder="180">
+        <label>Kilo (kg)</label><input type="number" id="k1" placeholder="75">
+        <button class="calc-btn" onclick="cBmi()">Hesapla</button>
+        <div id="rBmi" class="res">Verileri giriniz.</div>
+        <div class="info-section"><b>Nedir?</b> BMI, kilonuzun sağlıklı aralıkta olup olmadığını gösteren bir endekstir.</div>
     </div>
 
-    <div id="saglik" class="card">
-        <h3>BMI & İdeal Kilo</h3>
-        <div class="grid-inputs">
-            <div><label>Boy (cm)</label><input type="number" id="s_boy"></div>
-            <div><label>Kilo (kg)</label><input type="number" id="s_kilo"></div>
-        </div>
-        <button onclick="calcSaglik()">Hesapla</button>
-        <div id="resSaglik" class="res">Boy ve kilo giriniz.</div>
+    <div id="kredi" class="card">
+        <h2>Kredi Taksit Hesaplama</h2>
+        <label>Kredi Tutarı (TL)</label><input type="number" id="kt">
+        <label>Faiz Oranı (%)</label><input type="number" id="kf" step="0.01">
+        <label>Vade (Ay)</label><input type="number" id="kv">
+        <button class="calc-btn" onclick="cKredi()">Hesapla</button>
+        <div id="rKredi" class="res">Tutar ve faiz giriniz.</div>
     </div>
 
-    <div id="egitim" class="card">
-        <h3>Üniversite Not Ortalaması</h3>
-        <p>Vize %40, Final %60 üzerinden hesaplanır.</p>
-        <div class="grid-inputs">
-            <div><label>Vize</label><input type="number" id="e_vize"></div>
-            <div><label>Final</label><input type="number" id="e_final"></div>
-        </div>
-        <button onclick="calcNot()">Hesapla</button>
-        <div id="resNot" class="res">Notları giriniz.</div>
     </div>
 
-    <div id="genel" class="card">
-        <h3>KDV Hesaplama</h3>
-        <label>Tutar (TL)</label><input type="number" id="g_tutar">
-        <label>KDV Oranı (%)</label>
-        <select id="g_oran"><option value="20">%20</option><option value="10">%10</option><option value="1">%1</option></select>
-        <button onclick="calcKDV()">Hesapla</button>
-        <div id="resKDV" class="res">Tutarı giriniz.</div>
+<footer>
+    <div class="legal-links">
+        <a href="#">Hakkımızda</a> | <a href="#">Gizlilik Politikası</a> | <a href="#">İletişim</a>
     </div>
-</div>
+    <p>&copy; 2026 Hesapla Pro. Tüm hakları saklıdır.</p>
+</footer>
 
 <script>
-    function tab(name) {
+    function tab(id) {
         document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(name).classList.add('active');
+        document.getElementById(id).classList.add('active');
         event.currentTarget.classList.add('active');
     }
-
-    function calcKredi() {
-        let p = document.getElementById('k_tutar').value;
-        let r = document.getElementById('k_faiz').value / 100;
-        let n = document.getElementById('k_vade').value;
-        let taksit = (p * r * Math.pow(1+r, n)) / (Math.pow(1+r, n) - 1);
-        document.getElementById('resKredi').innerHTML = `Aylık Taksit: <b>${taksit.toFixed(2)} TL</b><br>Toplam Geri Ödeme: ${(taksit*n).toFixed(2)} TL`;
+    function cBmi() {
+        let b = document.getElementById('b1').value/100; let k = document.getElementById('k1').value;
+        let bmi = k/(b*b); let ideal = 22*(b*b);
+        document.getElementById('rBmi').innerHTML = `BMI: ${bmi.toFixed(1)} <br>İdeal Kilo: ${ideal.toFixed(0)} kg`;
     }
-
-    function calcSaglik() {
-        let b = document.getElementById('s_boy').value / 100;
-        let k = document.getElementById('s_kilo').value;
-        let bmi = k / (b * b);
-        document.getElementById('resSaglik').innerText = "BMI Endeksiniz: " + bmi.toFixed(1);
-    }
-
-    function calcNot() {
-        let v = document.getElementById('e_vize').value;
-        let f = document.getElementById('e_final').value;
-        document.getElementById('resNot').innerText = "Ortalama: " + (v*0.4 + f*0.6).toFixed(2);
-    }
-
-    function calcKDV() {
-        let t = parseFloat(document.getElementById('g_tutar').value);
-        let o = document.getElementById('g_oran').value / 100;
-        let kdv = t * o;
-        document.getElementById('resKDV').innerHTML = `KDV Dahil: <b>${(t + kdv).toFixed(2)} TL</b><br>KDV Tutarı: ${kdv.toFixed(2)} TL`;
+    function cKredi() {
+        let p = document.getElementById('kt').value; let r = (document.getElementById('kf').value/100); let n = document.getElementById('kv').value;
+        let taksit = (p*r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
+        document.getElementById('rKredi').innerHTML = `Aylık: ${taksit.toFixed(2)} TL<br>Toplam: ${(taksit*n).toFixed(0)} TL`;
     }
 </script>
-
 </body>
-    </html>
+                                    </html> 
