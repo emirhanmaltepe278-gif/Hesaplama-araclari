@@ -3,125 +3,172 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hesaplama Merkezi</title>
-<meta name="description" content="Faiz, kalori, TYT puan, kredi ve daha fazlasını hesapla.">
+<meta name="description" content="TYT-AYT puan, kredi, kalori, su ihtiyacı ve daha fazlasını detaylı şekilde hesaplayın.">
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f6fa;
+  color: #2d3436;
 }
 header {
-  padding: 15px;
+  padding: 18px;
   text-align: center;
   font-size: 22px;
-  font-weight: bold;
-}
-.tabs {
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-}
-.tab {
-  cursor: pointer;
-  padding: 8px 12px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 10px;
+  font-weight: 600;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 .container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  padding: 10px;
+  grid-template-columns: repeat(2,1fr);
+  gap: 12px;
+  padding: 15px;
 }
 .card {
-  background: rgba(255,255,255,0.1);
-  border-radius: 15px;
-  padding: 20px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 18px;
   text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
   cursor: pointer;
+  transition: 0.2s;
 }
+.card:hover { transform: scale(1.03); }
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.7);
-  display: none;
-  justify-content: center;
-  align-items: center;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.4);
+  display:none;
+  justify-content:center;
+  align-items:center;
 }
 .modal-content {
-  background: #fff;
-  color: #000;
-  padding: 20px;
-  border-radius: 15px;
-  width: 90%;
+  background:#fff;
+  border-radius:20px;
+  padding:20px;
+  width:90%;
+  max-width:420px;
 }
 input, button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 10px;
-  border: none;
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:12px;
+  border:1px solid #dfe6e9;
+  font-size:14px;
 }
-button { background: #667eea; color: white; }
-.close { float: right; cursor: pointer; }
-.ad {
-  background: white;
-  color: black;
-  margin: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
-  font-size: 14px;
+button {
+  background:#a29bfe;
+  color:white;
+  border:none;
+}
+.close { float:right; cursor:pointer; }
+.desc {
+  font-size:13px;
+  color:#636e72;
+  margin-top:5px;
+}
+.result {
+  margin-top:10px;
+  font-weight:600;
 }
 </style>
 </head>
 <body>
-<header>Hesaplama Merkezi</header><div class="tabs">
-  <div class="tab">💰 Finans</div>
-  <div class="tab">🏋️ Sağlık</div>
-  <div class="tab">📚 Eğitim</div>
-</div><div class="container">
-  <div class="card" onclick="openModal('faiz')">Faiz</div>
-  <div class="card" onclick="openModal('kredi')">Kredi</div>
-  <div class="card" onclick="openModal('kalori')">Kalori</div>
-  <div class="card" onclick="openModal('bmi')">BMI</div>
-  <div class="card" onclick="openModal('su')">Su İhtiyacı</div>
-  <div class="card" onclick="openModal('tyt')">TYT Puan</div>
-</div><div class="ad">Google AdSense Reklam Alanı</div><div class="modal" id="modal">
+<header>Hesaplama Merkezi</header><div class="container">
+  <div class="card" onclick="openModal('yks')">🎓 YKS Hesapla</div>
+  <div class="card" onclick="openModal('su')">💧 Su İhtiyacı</div>
+  <div class="card" onclick="openModal('kredi')">💰 Kredi</div>
+  <div class="card" onclick="openModal('kalori')">🔥 Kalori</div>
+</div><div class="modal" id="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">X</span>
     <div id="content"></div>
   </div>
 </div><script>
-function openModal(type) {
-  document.getElementById('modal').style.display = 'flex';
-  let c = '';
+function openModal(type){
+ document.getElementById('modal').style.display='flex';
+ let c='';
 
-  if(type==='faiz') c=`<h3>Faiz</h3><input id=p placeholder=Para><input id=o placeholder=%><input id=s placeholder=Yıl><button onclick="sonuc(p.value*(1+(o.value/100)*s.value))">Hesapla</button><p id=sonuc></p>`;
+ if(type==='yks'){
+  c=`<h3>YKS Puan Hesaplama</h3>
+  <div class='desc'>TYT ve AYT netlerinizi girerek yaklaşık puan ve sıralamanızı görün.</div>
 
-  if(type==='kredi') c=`<h3>Kredi</h3><input id=p placeholder=Para><input id=o placeholder=%><input id=v placeholder=Ay><button onclick="sonuc((p.value*(1+(o.value/100)))/v.value)">Aylık Ödeme</button><p id=sonuc></p>`;
+  <b>TYT</b>
+  <input id=t_tr placeholder='Türkçe net'>
+  <input id=t_mat placeholder='Matematik net'>
+  <input id=t_sos placeholder='Sosyal net'>
+  <input id=t_fen placeholder='Fen net'>
 
-  if(type==='kalori') c=`<h3>Kalori</h3><input id=k placeholder=Kilo><input id=b placeholder=Boy><input id=y placeholder=Yaş><button onclick="sonuc(10*k.value+6.25*b.value-5*y.value+5)">Hesapla</button><p id=sonuc></p>`;
+  <b>AYT</b>
+  <input id=a_mat placeholder='Matematik net'>
+  <input id=a_fiz placeholder='Fizik net'>
+  <input id=a_kim placeholder='Kimya net'>
+  <input id=a_bio placeholder='Biyoloji net'>
 
-  if(type==='bmi') c=`<h3>BMI</h3><input id=k placeholder=Kilo><input id=b placeholder=Boy><button onclick="sonuc(k.value/((b.value/100)*(b.value/100)))">Hesapla</button><p id=sonuc></p>`;
+  <button onclick="hesaplaYKS()">Hesapla</button>
+  <div class='result' id=sonuc></div>`;
+ }
 
-  if(type==='su') c=`<h3>Su İhtiyacı</h3><input id=k placeholder=Kilo><button onclick="sonuc(k.value*0.033)">Litre</button><p id=sonuc></p>`;
+ if(type==='su'){
+  c=`<h3>Günlük Su İhtiyacı</h3>
+  <div class='desc'>Vücut ağırlığı ve yaşa göre günlük içmeniz gereken su miktarı hesaplanır.</div>
+  <input id=kilo placeholder='Kilo (kg)'>
+  <input id=yas placeholder='Yaş'>
+  <button onclick="hesaplaSu()">Hesapla</button>
+  <div class='result' id=sonuc></div>`;
+ }
 
-  if(type==='tyt') c=`<h3>TYT</h3><input id=n placeholder=Net><button onclick="sonuc(n.value*5)">Puan</button><p id=sonuc></p>`;
+ if(type==='kredi'){
+  c=`<h3>Kredi Hesaplama</h3>
+  <div class='desc'>Kredi tutarı ve faiz oranına göre aylık ödeme hesaplanır.</div>
+  <input id=p placeholder='Kredi tutarı'>
+  <input id=o placeholder='Faiz %'>
+  <input id=v placeholder='Vade (ay)'>
+  <button onclick="hesaplaKredi()">Hesapla</button>
+  <div class='result' id=sonuc></div>`;
+ }
 
-  document.getElementById('content').innerHTML=c;
+ if(type==='kalori'){
+  c=`<h3>Günlük Kalori İhtiyacı</h3>
+  <div class='desc'>Yaş, boy ve kilonuza göre günlük almanız gereken kalori hesaplanır.</div>
+  <input id=k placeholder='Kilo'>
+  <input id=b placeholder='Boy cm'>
+  <input id=y placeholder='Yaş'>
+  <button onclick="hesaplaKalori()">Hesapla</button>
+  <div class='result' id=sonuc></div>`;
+ }
+
+ document.getElementById('content').innerHTML=c;
 }
 
-function sonuc(val){
- document.getElementById('sonuc').innerText = 'Sonuç: '+ Math.round(val);
+function hesaplaYKS(){
+ let t = (+t_tr.value*3 + +t_mat.value*3 + +t_sos.value*3 + +t_fen.value*3);
+ let a = (+a_mat.value*3 + +a_fiz.value*3 + +a_kim.value*3 + +a_bio.value*3);
+ let puan = 100 + t + a;
+ let siralama = Math.round(1000000 - puan*2000);
+ document.getElementById('sonuc').innerText = `Tahmini Puan: ${puan} | Sıralama: ${siralama}`;
+}
+
+function hesaplaSu(){
+ let litre = kilo.value * 0.033;
+ document.getElementById('sonuc').innerText = `Günlük yaklaşık ${litre.toFixed(1)} litre su içmelisiniz.`;
+}
+
+function hesaplaKredi(){
+ let aylik = (p.value*(1+(o.value/100)))/v.value;
+ document.getElementById('sonuc').innerText = `Aylık ödeme: ${Math.round(aylik)} TL`;
+}
+
+function hesaplaKalori(){
+ let sonuc = 10*k.value + 6.25*b.value - 5*y.value + 5;
+ document.getElementById('sonuc').innerText = `Günlük yaklaşık ${Math.round(sonuc)} kalori almalısınız.`;
 }
 
 function closeModal(){
  document.getElementById('modal').style.display='none';
 }
-</script><!-- Google AdSense buraya eklenecek --></body>
-  </html>
+</script></body>
+</html>
